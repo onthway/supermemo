@@ -21,16 +21,18 @@ class smPackage:
         try:
             self.stream = open(path, "rb")
             header_data = self.stream.read(34)
-            flag=self.stream.read(8)
+            flag=header_data[20:28]
             if flag == "DataChnk":
+                print "This is old file format!"
                 if header_data[:8] == "-SMArch-":
                     for tag, (start, end, t) in self.headerMap.items():
                         self.data[tag], = struct.unpack(t, header_data[start:end])
                     self.__read_entries()
                     self.__read_entry_name()
-            else
+            else:
+                print "This is New file format!"
                 if header_data[:8] == "-SMArch-":
-                    for tag, (start, end, t) in self.headerMap.items():
+                    for tag, (start, end, t) in self.headerMapNew.items():
                         self.data[tag], = struct.unpack(t, header_data[start:end])
                     self.__read_entries()
                     self.__read_entry_name()
@@ -53,8 +55,16 @@ class smPackage:
             self.entries.append(entry)
     def __read_entry_name(self):
         self.files = {}
-        #四个字节itme名称长度，3个字节变长，3个字节对于不同的文件会发生变化
-        self.stream.seek(self.data["name_offset"]+7)
+        #四个字节itme名称长度
+        self.stream.seek(self.data["name_offset"]+4)
+        #多个变长字节来表示itme名称长度，不同的文件会发生变化，通过最高位判断其是否结束
+        i=0
+        while i < 10:
+            len=struct.unpack("B", self.stream.read(1))
+            #print ("len=",len[0])
+            if (len[0] < 128):
+                break
+            i+=1
         #self.stream.seek(self.data["name_offset"])
         #name_chunk_size, = struct.unpack("I", self.stream.read(4))
         #print name_chunk_size
@@ -73,7 +83,9 @@ class smPackage:
             if entry["mode"] == 1:
                 data = zlib.decompress(data, -15)
             return data
-    def get_xpath_word(self):  
+    def get_xpath_word(self):
+        #在course.xml中查找单词对应的item序号
+        print "parse course.xml, wait for a moment..."
         doc = xml.dom.minidom.parse(".\\course.xml")
         #寻找单词所在条目，id对应item名称，keywords对应单词名称
         for node in xpath.find("//element[@subtype = $subtype]", doc, subtype = "1"):
@@ -91,18 +103,26 @@ class smPackage:
             filename = filename.replace("?", "")
             if self.files.has_key(entryname):
                 print (entryname+"==>"+filename)
-                f = open(filename, "wb")
-                f.write(self.read_file(entryname))
-                f.close()
+                try:
+                    f = open(filename, "wb")
+                    f.write(self.read_file(entryname))
+                    f.close()
+                except IOError:
+                    print "IOError"
+                    pass
             entryname="media/"+number+"a.mp3"
             filename=wordname+".mp3"
             filename = filename.replace("/", "_")
             filename = filename.replace("?", "")
             if self.files.has_key(entryname):
                 print (entryname+"==>"+filename)
-                f = open(filename, "wb")
-                f.write(self.read_file(entryname))
-                f.close()
+                try:
+                    f = open(filename, "wb")
+                    f.write(self.read_file(entryname))
+                    f.close()
+                except IOError:
+                    print "IOError"
+                    pass
     def unpack(self):
         for entry in self.entries:
             #print entry["name"]
@@ -110,7 +130,7 @@ class smPackage:
             if filename.find('course.xml') == -1:
                 #print filename
                 continue
-            print entry["name"]
+            print "Now exporting the file : "+entry["name"]
             f = open(filename, "wb")
             f.write(self.read_file(entry["name"]))
             f.close()
