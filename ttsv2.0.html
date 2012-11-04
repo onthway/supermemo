@@ -24,6 +24,8 @@
                     var c = $('#textarea').val();
                     arr = c.split('\n');
                     slideShow();
+                    $("#param").fadeTo(1000,0.1);
+
                 });
             });
 
@@ -113,7 +115,7 @@
         <br>
     <div id="allgb" align="center" style="position: absolute;top=0px;right=200px">
       	<audio name="audioplayer" id="audioplayer" src="./speech/apple.mp3" autoplay="autoplay"> </audio>
-        <img id="slide" src="./images1/apple.jpg" name="slide" height="600" />
+        <img id="slide" src="./images1/apple.jpg" name="slide" height="700" />
     </div>
     </div>    
         <textarea name="textarea" id="textarea" rows="30" cols="30">cat</textarea>
