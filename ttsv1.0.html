@@ -1,0 +1,100 @@
+<html>
+    
+    <head>
+        <script type="text/javascript" src="./jquery/jquery.js"></script>
+        <script type="text/javascript">
+            var VoiceObj = new ActiveXObject("Sapi.SpVoice");
+            var objFile = new ActiveXObject("Sapi.SpFileStream");
+            var count = 0;
+            var fn = "";
+            var arr;
+            var ttime;
+            $(document).ready(function () {
+                $("#lxxx").click(function () {
+                    $("#textarea").hide();
+                    var c = $('#textarea').val();
+                    arr = c.split('\n');
+                    slideShow();
+                });
+            });
+
+            $(document).ready(function () {
+                $("#sxxx").click(function () {
+                    $("#textarea").hide();
+                    var c = $('#textarea').val();
+                    arr = c.split('\n');
+                    fn = arr[count];
+                    slideShowsingle();
+                    count = count + 1;
+                    if (count >= arr.length - 1) {
+                        count = 0;
+                    }
+                });
+            });
+
+            function slideShowsingle() {
+                fn = arr[count];
+                count = count + 1;
+                if (count >= arr.length) {
+                    count = 0;
+                }
+                var delay = document.getElementById('jgsj').value;
+                var offset = document.getElementById('offset').value;
+                setTimeout('gallery()', delay - offset);
+                setTimeout('speak()', delay);
+                ttime = setTimeout('slideShowsingle()', delay)
+
+            }
+
+            function slideShow() {
+                var ii = 0;
+                ii = Math.floor(Math.random() * (arr.length));
+                fn = arr[ii];
+                //document.getElementById('debug').value=ii+fn+'len:'+arr.length;
+                var delay = document.getElementById('jgsj').value;
+                var offset = document.getElementById('offset').value;
+                setTimeout('gallery()', delay - offset);
+                setTimeout('speak()', delay);
+                ttime = setTimeout('slideShow()', delay)
+            }
+
+            function gallery() {
+                document.images.slide.src = "D://SLEMedia//images1//" + fn + ".jpg";
+            }
+
+            function speak() {
+                try {
+                    objFile.Open("D://SLEMedia//speech//" + fn + ".wav");
+                    VoiceObj.Speakstream(objFile);
+                    objFile.Close();
+                } catch (err) {
+                    VoiceObj.Speak(fn, 1);
+                    $("#ttstxt").val($("#ttstxt").val()+" "+fn);
+                }
+            }
+
+            function stopCount() {
+                $("#textarea").show();
+                clearTimeout(ttime);
+            }
+        </script>
+    </head>
+    
+    <body>
+        <img src="./images1/apple.jpg" name="slide" height="600" />
+        <br>
+        <button id="sxxx">顺序学习</button>
+        <button id="lxxx">乱序学习</button>
+        <input type="button" value="停止！" onClick="stopCount()">
+        <br>播放间隔时间(ms)：
+        <input id="jgsj" type="text" size=6 value=700>
+        <br>图片提前加载(ms)：
+        <input id="offset" type="text" size=6 value=300>
+        <input id="ttstxt" type="text" >
+        <embed src="./speech/apple.wav" id="theAudio" hidden="true" autostart="false"
+        volume="90"></embed>
+        <br>
+        <textarea name="textarea" id="textarea" rows="30" cols="30">将单词列表拷贝到此处，每个单词一行</textarea>
+    </body>
+
+</html>
