@@ -20,6 +20,7 @@ endif
 :nmap ,v :e $VIM/_vimrc<CR>
 " 译释：在normal模式下，先后按下 ,s 两个键执行_vimrc，而 ,v 则是编辑_vimrc
 
+let g:fe_es_exe = 'D:\GoogleDrive\greensoftcomm\es.exe'
 " _
 " __ |
 " / | /
@@ -89,11 +90,6 @@ let g:mapleader = ","
 
 "Fast saving
 nmap <leader>w :w!<cr>
-
-"使更新 _vimrc 更容易
-:nmap ,s :source $VIM/_vimrc # 译释：nmap 是绑定一个在normal模式下的快捷键
-:nmap ,v :e $VIM/_vimrc
-" 译释：在normal模式下，先后按下 ,s 两个键执行_vimrc，而 ,v 则是编辑_vimrc
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Font
