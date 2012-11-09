@@ -4,7 +4,6 @@ source $VIMRUNTIME/vimrc_example.vim
 behave mswin
 
 
-
 set langmenu=zh_CN.utf-8
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
