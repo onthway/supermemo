@@ -1,6 +1,6 @@
 set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
+source $VIMRUNTIME/vimrc_example.vim
 behave mswin
 
 
@@ -9,6 +9,7 @@ set langmenu=zh_CN.utf-8
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language messages zh_cn.utf-8
+let mapleader=","
 
 if has('win32')
 map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>    #非插入模式下F11全屏
@@ -16,8 +17,11 @@ imap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 endif
 
 " 使更新 _vimrc 更容易
-:nmap ,s :source $VIM/_vimrc<CR> 
-:nmap ,v :e $VIM/_vimrc<CR>
+:nmap <leader>s :source $VIM/_vimrc<cr> 
+:nmap <leader>v :e $VIM/_vimrc<cr>
+"When .vimrc is edited, reload it
+autocmd! bufwritepost _vimrc source $VIM/_vimrc 
+
 " 译释：在normal模式下，先后按下 ,s 两个键执行_vimrc，而 ,v 则是编辑_vimrc
 
 let g:fe_es_exe = 'D:\GoogleDrive\greensoftcomm\es.exe'
