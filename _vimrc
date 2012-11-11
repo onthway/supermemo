@@ -20,10 +20,38 @@ endif
 :nmap <leader>v :e $VIM/_vimrc<cr>
 "When .vimrc is edited, reload it
 autocmd! bufwritepost _vimrc source $VIM/_vimrc 
-
 " 译释：在normal模式下，先后按下 ,s 两个键执行_vimrc，而 ,v 则是编辑_vimrc
+" 使用vundle对vim插件进行管理 
 
-let g:fe_es_exe = 'D:\GoogleDrive\greensoftcomm\es.exe'
+" vundle 的设置
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+Bundle 'gmarik/vundle'
+
+"Bundle 'c.vim'
+Bundle 'jsbeautify'
+Bundle 'pyflakes'         
+"Bundle 'matchit'         
+"Bundle 'UltiSnips'
+"Bundle 'pydoc'
+"Bundle 'vimwiki'
+Bundle 'SuperTab'
+
+"Bundle 'markdown'
+"Bundle 'NERD_commenter'
+Bundle 'vim_faq'
+filetype plugin indent on 
+
+" SuperTab 的设置
+" SuperTabRetainCompletionType 缺省为1，意为记住你上次的补全方式，直到使用其它的补全命令改变它；如果把它设成2，意味着记住上次的补全方式，直到按ESC退出插入模式为止；如果设为0，意味着不记录上次的补全方式。
+let g:SuperTabRetainCompletionType = 1
+let g:SuperTabDefaultCompletionType = "<C-P>" 
+
+
+" findeverything 的设置
+if has('win32') 
+	let g:fe_es_exe = 'D:\GoogleDrive\greensoftcomm\es.exe'
+endif 
 " _
 " __ |
 " / | /
@@ -145,7 +173,7 @@ else
 set background=dark
 colorscheme default
 endif
-set guifont=微软雅黑\ 12
+set guifont=Courier:h14
 
 "Some nice mapping to switch syntax (useful if one mixes different languages in one file)
 map <leader>1 :set syntax=cheetah<cr>
@@ -719,27 +747,3 @@ map <F2> :%s//s*$//g<cr>:noh<cr>''
 "Super paste
 ino <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
 
-set diffexpr=MyDiff()
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunction
