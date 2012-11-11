@@ -746,4 +746,6 @@ map <F2> :%s//s*$//g<cr>:noh<cr>''
 
 "Super paste
 ino <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
+"设置运行python代码的快捷键，绑定到F12按键上
+map <F12> :!D:\OurInternet\Python27\python.exe
 
