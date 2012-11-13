@@ -145,7 +145,11 @@ else
 set background=dark
 colorscheme default
 endif
-set guifont=微软雅黑\ 12
+if has("win32")
+	set guifont=Courier:h14
+	"set guifontwide=YaHei\ Consolas\ Hybrid:h14
+endif
+
 
 "Some nice mapping to switch syntax (useful if one mixes different languages in one file)
 map <leader>1 :set syntax=cheetah<cr>
