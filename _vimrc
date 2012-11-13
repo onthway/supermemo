@@ -11,8 +11,8 @@ language messages zh_cn.utf-8
 let mapleader=","
 
 if has('win32')
-map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>    #非插入模式下F11全屏
-imap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>    #插入模式下F11全屏
+	map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>    #非插入模式下F11全屏
+	imap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>    #插入模式下F11全屏
 endif
 
 " 使更新 _vimrc 更容易
@@ -24,9 +24,10 @@ autocmd! bufwritepost _vimrc source $VIM/_vimrc
 " 使用vundle对vim插件进行管理 
 
 " vundle 的设置
-set rtp+=~/.vim/bundle/vundle
+set rtp+=$VIMRUNTIME/bundle/vundle
 call vundle#rc()
 Bundle 'gmarik/vundle'
+Bundle 'tpope/vim-markdown'
 
 "Bundle 'c.vim'
 Bundle 'jsbeautify'
@@ -83,20 +84,20 @@ endif
 set nocompatible
 
 function! MySys()
-if has("win32")
-return "win32"
-elseif has("unix")
-return "unix"
-else
-return "mac"
-endif
+	if has("win32")
+		return "win32"
+	elseif has("unix")
+		return "unix"
+	else
+		return "mac"
+	endif
 endfunction
 "Set shell to be bash
 if MySys() == "unix" || MySys() == "mac"
-set shell=bash
+	set shell=bash
 else
-"I have to run win32 python without cygwin
-"set shell=E:cygwininsh
+	"I have to run win32 python without cygwin
+	"set shell=E:cygwininsh
 endif
 
 "Sets how many lines of history VIM har to remember
@@ -105,13 +106,13 @@ set history=400
 "Enable filetype plugin
 filetype on
 if has("eval") && v:version>=600
-filetype plugin on
-filetype indent on
+	filetype plugin on
+	filetype indent on
 endif
 
 "Set to auto read when a file is changed from the outside
 if exists("&autoread")
-set autoread
+	set autoread
 endif
 
 "Have the mouse enabled all the time:
@@ -129,55 +130,58 @@ nmap <leader>w :w!<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Enable syntax hl
 if MySys()=="unix"
-if v:version<600
-if filereadable(expand("$VIM/syntax/syntax.vim"))
-syntax on
-endif
+	if v:version<600
+		if filereadable(expand("$VIM/syntax/syntax.vim"))
+			syntax on
+		endif
+	else
+		syntax on
+	endif
 else
-syntax on
-endif
-else
-syntax on
+	syntax on
 endif
 
 "internationalization
 "I only work in Win2k Chinese version
 if has("multi_byte")
-set termencoding=chinese
-set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,chinese
+	set termencoding=chinese
+	set encoding=utf-8
+	set fileencodings=ucs-bom,utf-8,chinese
 endif
 
 "if you use vim in tty,
 "'uxterm -cjk' or putty with option 'Treat CJK ambiguous characters as wide' on
 if exists("&ambiwidth")
-set ambiwidth=double
+	set ambiwidth=double
 endif
 
 if has("gui_running")
-set guioptions-=m
-set guioptions-=T
-set guioptions-=l
-set guioptions-=L
-set guioptions-=r
-set guioptions-=R
+	set guioptions-=m
+	set guioptions-=T
+	set guioptions-=l
+	set guioptions-=L
+	set guioptions-=r
+	set guioptions-=R
 
-if MySys()=="win32"
-"start gvim maximized
-if has("autocmd")
-au GUIEnter * simalt ~x
-endif
-endif
-"set psc_style='darkblue'
-colorscheme darkblue
-"colorscheme default
+	if MySys()=="win32"
+		"start gvim maximized
+		if has("autocmd")
+			au GUIEnter * simalt ~x
+		endif
+	endif
+	"set psc_style='darkblue'
+	colorscheme darkblue
+	"colorscheme default
 else
-set background=dark
-colorscheme default
+	set background=dark
+	colorscheme default
 endif
-set guifont=Courier:h15:cANSI
-set guifontwide=youyuan:h15
-"幼圆字体
+"字体设置
+if has("win32")
+	set guifont=Courier:h14:cANSI
+	set guifontwide=youyuan:h12
+endif
+
 
 "Some nice mapping to switch syntax (useful if one mixes different languages in one file)
 map <leader>1 :set syntax=cheetah<cr>
@@ -188,9 +192,9 @@ map <leader>$ :syntax sync fromstart<cr>
 
 "Highlight current
 if has("gui_running")
-if exists("&cursorline")
-set cursorline
-endif
+	if exists("&cursorline")
+		set cursorline
+	endif
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -267,12 +271,12 @@ set statusline+=%f/ " file name
 set statusline+=%h%1*%m%r%w%0* " flag
 set statusline+=[
 if v:version >= 600
-set statusline+=%{strlen(&ft)?&ft:'none'}, " filetype
-set statusline+=%{&encoding}, " encoding
+	set statusline+=%{strlen(&ft)?&ft:'none'}, " filetype
+	set statusline+=%{&encoding}, " encoding
 endif
 set statusline+=%{&fileformat}] " file format
 if filereadable(expand("$VIM/vimfiles/plugin/vimbuddy.vim"))
-set statusline+=/ %{VimBuddy()} " vim buddy
+	set statusline+=/ %{VimBuddy()} " vim buddy
 endif
 set statusline+=%= " right align
 set statusline+=%2*0x%-8B/ " current char
@@ -288,11 +292,11 @@ set statusline+=%2*0x%-8B/ " current char
 "/ endif
 
 fun! FixMiniBufExplorerTitle()
-if "-MiniBufExplorer-" == bufname("%")
-setlocal statusline=%2*%-3.3n%0*
-setlocal statusline+=/[Buffers/]
-setlocal statusline+=%=%2*/ %<%P
-endif
+	if "-MiniBufExplorer-" == bufname("%")
+		setlocal statusline=%2*%-3.3n%0*
+		setlocal statusline+=/[Buffers/]
+		setlocal statusline+=%=%2*/ %<%P
+	endif
 endfun
 
 "if v:version>=600
@@ -305,10 +309,10 @@ endfun
 
 " Nice window title
 if has('title') && (has('gui_running') || &title)
-set titlestring=
-set titlestring+=%f/ " file name
-set titlestring+=%h%m%r%w " flag
-"set titlestring+=/ -/ %{v:progname} " program name
+	set titlestring=
+	set titlestring+=%f/ " file name
+	set titlestring+=%h%m%r%w " flag
+	"set titlestring+=/ -/ %{v:progname} " program name
 endif
 
 
@@ -339,11 +343,11 @@ map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
 
 if v:version>=700
-set switchbuf=usetab
+	set switchbuf=usetab
 endif
 
 if exists("&showtabline")
-set stal=2
+	set stal=2
 endif
 
 "Moving fast to front, back and 2 sides ;)
@@ -382,7 +386,7 @@ imap <c-h> <esc>ha
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Comment for C like language
 if has("autocmd")
-au BufNewFile,BufRead *.js,*.htc,*.c,*.tmpl,*.css ino $c /**<cr> **/<esc>O
+	au BufNewFile,BufRead *.js,*.htc,*.c,*.tmpl,*.css ino $c /**<cr> **/<esc>O
 endif
 
 "My information
@@ -402,10 +406,10 @@ vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 if MySys() == "mac"
-nmap <D-j> <M-j>
-nmap <D-k> <M-k>
-vmap <D-j> <M-j>
-vmap <D-k> <M-k>
+	nmap <D-j> <M-j>
+	nmap <D-k> <M-k>
+	vmap <D-j> <M-j>
+	vmap <D-k> <M-k>
 endif
 
 
@@ -413,29 +417,29 @@ endif
 " => Command-line config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 func! Cwd()
-let cwd = getcwd()
-return "e " . cwd
+	let cwd = getcwd()
+	return "e " . cwd
 endfunc
 
 func! DeleteTillSlash()
-let g:cmd = getcmdline()
-if MySys() == "unix" || MySys() == "mac"
-let g:cmd_edited = substitute(g:cmd, "(.*[/]).*", "", "")
-else
-let g:cmd_edited = substitute(g:cmd, "(.*[/]).*", "", "")
-endif
-if g:cmd == g:cmd_edited
-if MySys() == "unix" || MySys() == "mac"
-let g:cmd_edited = substitute(g:cmd, "(.*[/]).*/", "", "")
-else
-let g:cmd_edited = substitute(g:cmd, "(.*[/]).*[/]", "", "")
-endif
-endif
-return g:cmd_edited
+	let g:cmd = getcmdline()
+	if MySys() == "unix" || MySys() == "mac"
+		let g:cmd_edited = substitute(g:cmd, "(.*[/]).*", "", "")
+	else
+		let g:cmd_edited = substitute(g:cmd, "(.*[/]).*", "", "")
+	endif
+	if g:cmd == g:cmd_edited
+		if MySys() == "unix" || MySys() == "mac"
+			let g:cmd_edited = substitute(g:cmd, "(.*[/]).*/", "", "")
+		else
+			let g:cmd_edited = substitute(g:cmd, "(.*[/]).*[/]", "", "")
+		endif
+	endif
+	return g:cmd_edited
 endfunc
 
 func! CurrentFileDir(cmd)
-return a:cmd . " " . expand("%:p:h") . "/"
+	return a:cmd . " " . expand("%:p:h") . "/"
 endfunc
 
 "cno $q <C->eDeleteTillSlash()<cr>
@@ -478,11 +482,11 @@ set nowb
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Enable folding, I find it very useful
 if exists("&foldenable")
-set fen
+	set fen
 endif
 
 if exists("&foldlevel")
-set fdl=0
+	set fdl=0
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -537,6 +541,7 @@ map <leader>y :YRShow<cr>
 "Split vertically
 let g:explVertical=1
 
+
 "Window size
 let g:explWinSize=35
 
@@ -585,14 +590,14 @@ let g:Tex_DefaultTargetFormat="pdf"
 let g:Tex_ViewRule_pdf='xpdf'
 
 if has("autocmd")
-"Binding
-au BufRead *.tex map <silent><leader><space> :w!<cr> :silent! call Tex_RunLaTeX()<cr>
+	"Binding
+	au BufRead *.tex map <silent><leader><space> :w!<cr> :silent! call Tex_RunLaTeX()<cr>
 
-"Auto complete some things ;)
-au BufRead *.tex ino <buffer> $i indent
-au BufRead *.tex ino <buffer> $* cdot
-au BufRead *.tex ino <buffer> $i item
-au BufRead *.tex ino <buffer> $m [<cr>]<esc>O
+	"Auto complete some things ;)
+	au BufRead *.tex ino <buffer> $i indent
+	au BufRead *.tex ino <buffer> $* cdot
+	au BufRead *.tex ino <buffer> $i item
+	au BufRead *.tex ino <buffer> $m [<cr>]<esc>O
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -607,7 +612,7 @@ endif
 " => VIM
 """"""""""""""""""""""""""""""
 if has("autocmd") && v:version>600
-au BufRead,BufNew *.vim map <buffer> <leader><space> :w!<cr>:source %<cr>
+	au BufRead,BufNew *.vim map <buffer> <leader><space> :w!<cr>:source %<cr>
 endif
 
 """"""""""""""""""""""""""""""
@@ -687,53 +692,53 @@ let use_xhtml = 1
 
 
 if has("eval") && has("autocmd")
-"vim 5.8.9 on mingw donot know what is <SID>, so I avoid to use function
-"c/cpp
-fun! Abbrev_cpp()
-ia <buffer> cci const_iterator
-ia <buffer> ccl cla
-ia <buffer> cco const
-ia <buffer> cdb bug
-ia <buffer> cde throw
-ia <buffer> cdf /** file<CR><CR>/<Up>
-ia <buffer> cdg ingroup
-ia <buffer> cdn /** Namespace <namespace<CR><CR>/<Up>
-ia <buffer> cdp param
-ia <buffer> cdt test
-ia <buffer> cdx /**<CR><CR>/<Up>
-ia <buffer> cit iterator
-ia <buffer> cns Namespace ianamespace
-ia <buffer> cpr protected
-ia <buffer> cpu public
-ia <buffer> cpv private
-ia <buffer> csl std::list
-ia <buffer> csm std::map
-ia <buffer> css std::string
-ia <buffer> csv std::vector
-ia <buffer> cty typedef
-ia <buffer> cun using Namespace ianamespace
-ia <buffer> cvi virtual
-ia <buffer> #i #include
-ia <buffer> #d #define
-endfunction
+	"vim 5.8.9 on mingw donot know what is <SID>, so I avoid to use function
+	"c/cpp
+	fun! Abbrev_cpp()
+		ia <buffer> cci const_iterator
+		ia <buffer> ccl cla
+		ia <buffer> cco const
+		ia <buffer> cdb bug
+		ia <buffer> cde throw
+		ia <buffer> cdf /** file<CR><CR>/<Up>
+		ia <buffer> cdg ingroup
+		ia <buffer> cdn /** Namespace <namespace<CR><CR>/<Up>
+		ia <buffer> cdp param
+		ia <buffer> cdt test
+		ia <buffer> cdx /**<CR><CR>/<Up>
+		ia <buffer> cit iterator
+		ia <buffer> cns Namespace ianamespace
+		ia <buffer> cpr protected
+		ia <buffer> cpu public
+		ia <buffer> cpv private
+		ia <buffer> csl std::list
+		ia <buffer> csm std::map
+		ia <buffer> css std::string
+		ia <buffer> csv std::vector
+		ia <buffer> cty typedef
+		ia <buffer> cun using Namespace ianamespace
+		ia <buffer> cvi virtual
+		ia <buffer> #i #include
+		ia <buffer> #d #define
+	endfunction
 
-fun! Abbrev_java()
-ia <buffer> #i import
-ia <buffer> #p System.out.println
-ia <buffer> #m public static void main(String[] args)
-endfunction
+	fun! Abbrev_java()
+		ia <buffer> #i import
+		ia <buffer> #p System.out.println
+		ia <buffer> #m public static void main(String[] args)
+	endfunction
 
-fun! Abbrev_python()
-ia <buffer> #i import
-ia <buffer> #p print
-ia <buffer> #m if __name__=="__main":
-endfunction
-augroup abbreviation
-au!
-au FileType cpp,c :call Abbrev_cpp()
-au FileType java :call Abbrev_java()
-au FileType python :call Abbrev_python()
-augroup END
+	fun! Abbrev_python()
+		ia <buffer> #i import
+		ia <buffer> #p print
+		ia <buffer> #m if __name__=="__main":
+	endfunction
+	augroup abbreviation
+		au!
+		au FileType cpp,c :call Abbrev_cpp()
+		au FileType java :call Abbrev_java()
+		au FileType python :call Abbrev_python()
+	augroup END
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
