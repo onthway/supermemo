@@ -36,10 +36,12 @@ Bundle 'pyflakes'
 "Bundle 'pydoc'
 "Bundle 'vimwiki'
 Bundle 'SuperTab'
+"Bundle 'plasticboy/vim-markdown'
+Bundle 'tpope/vim-markdown'
 
-"Bundle 'markdown'
 "Bundle 'NERD_commenter'
 Bundle 'vim_faq'
+
 filetype plugin indent on 
 
 " SuperTab 的设置
@@ -173,7 +175,9 @@ else
 set background=dark
 colorscheme default
 endif
-set guifont=Courier:h14
+set guifont=Courier:h15:cANSI
+set guifontwide=youyuan:h15
+"幼圆字体
 
 "Some nice mapping to switch syntax (useful if one mixes different languages in one file)
 map <leader>1 :set syntax=cheetah<cr>
