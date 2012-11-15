@@ -6,9 +6,6 @@ While 1
     Sleep(1000)
 Wend
 
-
-
-
 Func AutoDoing()
 	Send("^c")
     If WinExists("[CLASS:TSMMain]") Then
@@ -24,12 +21,12 @@ Func AutoDoing()
 		Sleep(1000)
 		SplashOff()
 	Else
-		Run("D:\greensoft\SuperMemo\sm15.exe")
+		Run(@ScriptDir & "\sm15.exe")
 		SplashTextOn("", "Æô¶¯supermemo...", 200, 40, -1, -1, "", 24)
 		Sleep(5000)
 		SplashOff()
     	ControlClick("[CLASS:TElWind]","","[CLASS:TPanel; INSTANCE:1]","left",1,22,15)
-		;WinActivate($winhd)
+		WinWaitActive("[CLASS:TElWind]","", 10);
 		SplashTextOn("", "Ìí¼Óµ½supermemo...", 200, 40, -1, -1, "", 24)
 		Sleep(1000)
 		SplashOff()
