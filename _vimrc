@@ -179,7 +179,7 @@ endif
 "字体设置
 if has("win32")
 	set guifont=Courier:h14:cANSI
-	set guifontwide=youyuan:h12
+	"set guifontwide=youyuan:h12
 endif
 
 
